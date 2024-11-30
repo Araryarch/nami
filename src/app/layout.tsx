@@ -14,7 +14,7 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Nami',
+  title: 'Chatbot Starter Kit',
   description: 'NextJS 15 - Chatbot Template with BunJS and GROQ API'
 }
 
