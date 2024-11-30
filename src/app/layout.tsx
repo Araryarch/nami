@@ -15,7 +15,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: 'Nami',
-  description: 'NextJS 15 - AI Template'
+  description: 'NextJS 15 - AI Template with BunJS and GROQ API'
 }
 
 export default function RootLayout({
