@@ -1,5 +1,6 @@
 {
   "name": "next-chatbot-kit",
+  "type": "module",
   "bin": {
     "create-next-chatbot-kit": "./bin/cli.js"
   },
@@ -12,7 +13,7 @@
     "ai"
   ],
   "author": "Ararya Arka",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
