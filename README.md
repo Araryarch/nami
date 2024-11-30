@@ -16,31 +16,25 @@
 
 To get started with `next-chatbot-kit`, follow these steps:
 
-1. Install next-chatbot-kit gloabally :
+1. Install deps and make a folder :
 
    ```bash
-   npm install -g next-chatbot-kit
+   npx create-next-chatbot-kit <projects-name>
    ```
 
-2. Install Deps and make a folder:
+2. change your directory:
 
    ```bash
-   create-next-chatbot-kit namaprojek
+   cd <projects-name>
    ```
 
-3. change your directory:
-
-   ```bash
-   cd namaprojek
-   ```
-
-4. Run the development server:
+3. Run the development server:
 
    ```bash
    bun dev
    ```
 
-5. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
+4. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
 
 ## Usage
 
