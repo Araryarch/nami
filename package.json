@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/araryarch/next-chatbot-kit.git"
   },
-  "homepage": "https://github.com/araryarch/next-chatbot-kit#readme",
+  "demo": "https://next-chatbot-kit.vercel.app/",
   "bugs": {
     "url": "https://github.com/araryarch/next-chatbot-kit/issues"
   },
