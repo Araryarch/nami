@@ -12,6 +12,19 @@
 - **TypeScript Support** - Fully typed with TypeScript to ensure better code quality and IntelliSense.
 - **Responsive Design** - Works well on all screen sizes with a mobile-first approach.
 
+## Pre-requisite
+
+- Install Node.js LTS version and Bun.js
+
+- **Windows Powershell**
+  ```bash
+  powershell -c "irm bun.sh/install.ps1 | iex"
+  ```
+- **Linux or MacOS**
+  ```bash
+  curl -fsSL https://bun.sh/install | bash
+  ```
+
 ## Installation
 
 To get started with `next-chatbot-kit`, follow these steps:
@@ -28,13 +41,29 @@ To get started with `next-chatbot-kit`, follow these steps:
    cd <projects-name>
    ```
 
-3. Run the development server:
+3. Add a `.env` File
+
+You can create a `.env` file manually or by running the following command in your project directory:
+
+```bash
+touch .env
+```
+
+Next, add the following content to your `.env` file:
+
+```env
+GROQ_API_KEY=YOUR_API_KEY_HERE
+```
+
+Replace `YOUR_API_KEY_HERE` with your actual GROQ API key, which you can obtain from the [GROQ Console](https://console.groq.com/keys).
+
+4. Run the development server:
 
    ```bash
    bun dev
    ```
 
-4. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
+5. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
 
 ## Usage
 
