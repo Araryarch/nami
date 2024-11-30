@@ -43,17 +43,17 @@ To get started with `next-chatbot-kit`, follow these steps:
 
 3. Add a `.env` File
 
-You can create a `.env` file manually or by running the following command in your project directory:
+- You can create a `.env` file manually or by running the following command in your project directory:
 
-```bash
-touch .env
-```
+  ```bash
+  touch .env
+  ```
 
-Next, add the following content to your `.env` file:
+- Next, add the following content to your `.env` file:
 
-```env
-GROQ_API_KEY=YOUR_API_KEY_HERE
-```
+  ```env
+  GROQ_API_KEY=YOUR_API_KEY_HERE
+  ```
 
 Replace `YOUR_API_KEY_HERE` with your actual GROQ API key, which you can obtain from the [GROQ Console](https://console.groq.com/keys).
 
