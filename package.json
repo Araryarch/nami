@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/araryarch/next-chatbot-kit.git"
   },
-  "demo": "https://next-chatbot-kit.vercel.app/",
+  "homepage": "https://next-chatbot-kit.vercel.app/",
   "bugs": {
     "url": "https://github.com/araryarch/next-chatbot-kit/issues"
   },
@@ -21,7 +21,7 @@
     "ai"
   ],
   "author": "Ararya Arka",
-  "version": "0.1.12",
+  "version": "1.0.0",
   "preferGlobal": true,
   "scripts": {
     "dev": "next dev --turbopack",
