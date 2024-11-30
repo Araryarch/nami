@@ -14,6 +14,7 @@
   ],
   "author": "Ararya Arka",
   "version": "0.1.8",
+  "preferGlobal": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

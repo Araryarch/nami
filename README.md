@@ -16,28 +16,28 @@
 
 To get started with `next-chatbot-kit`, follow these steps:
 
-1. Clone the repository:
+1. Install next-chatbot-kit gloabally :
 
    ```bash
-   git clone https://github.com/araryarch/next-chatbot-kit.git
+   npm install -g next-chatbot-kit
    ```
 
-2. Navigate to the project folder:
+2. Install Deps and make a folder:
 
    ```bash
-   cd next-chatbot-kit
+   create-next-chatbot-kit namaprojek
    ```
 
-3. Install the dependencies using Bun or you can still use npm if u want:
+3. change your directory:
 
    ```bash
-   bun install
+   cd namaprojek
    ```
 
 4. Run the development server:
 
    ```bash
-   bun run dev
+   bun dev
    ```
 
 5. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
