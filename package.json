@@ -21,7 +21,7 @@
     "ai"
   ],
   "author": "Ararya Arka",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "preferGlobal": true,
   "scripts": {
     "dev": "next dev --turbopack",
