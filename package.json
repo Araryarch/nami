@@ -1,6 +1,6 @@
 {
   "name": "next-chatbot-kit",
-  "description": "starter template to create an next js chatbot using groq API",
+  "description": "starter template to create a Next.js chatbot using Groq API",
   "license": "MIT",
   "keywords": [
     "template",
@@ -15,7 +15,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "create": "node ./bin/create-next-chatbot-kit.js"
+  },
+  "bin": {
+    "create-next-chatbot-kit": "./bin/create-next-chatbot-kit.js"
   },
   "dependencies": {
     "@ai-sdk/groq": "^1.0.4",
