@@ -5,6 +5,14 @@
     "create-next-chatbot-kit": "./bin/cli.js"
   },
   "description": "starter template to create a Next.js chatbot using Groq API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/araryarch/next-chatbot-kit.git"
+  },
+  "homepage": "https://github.com/araryarch/next-chatbot-kit#readme",
+  "bugs": {
+    "url": "https://github.com/araryarch/next-chatbot-kit/issues"
+  },
   "license": "MIT",
   "keywords": [
     "template",
