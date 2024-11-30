@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# next-chatbot-kit
 
-## Getting Started
+`next-chatbot-kit` is a starter template for building chatbots using **Next.js 15** and **Bun.js**. This template provides a simple and flexible foundation for creating conversational AI applications with support for integrating third-party services, state management, and scalable chatbot components.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js 15** - Built with the latest features of Next.js.
+- **Bun.js** - Uses Bun as the JavaScript runtime for faster builds and executions.
+- **Customizable UI** - Easy to modify the chatbot UI according to your design requirements.
+- **State Management** - Efficient state management for chatbot responses.
+- **API Integration** - Seamlessly integrates with AI models or any custom backend for generating responses.
+- **TypeScript Support** - Fully typed with TypeScript to ensure better code quality and IntelliSense.
+- **Responsive Design** - Works well on all screen sizes with a mobile-first approach.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To get started with `next-chatbot-kit`, follow these steps:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone the repository:
 
-## Learn More
+   ```bash
+   git clone https://github.com/araryarch/next-chatbot-kit.git
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Navigate to the project folder:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cd next-chatbot-kit
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Install the dependencies using Bun or you can still use npm if u want:
 
-## Deploy on Vercel
+   ```bash
+   bun install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Run the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   bun run dev
+   ```
+
+5. Open your browser and visit `http://localhost:3000` to see the chatbot in action.
+
+## Usage
+
+You can easily customize the template by editing the following:
+
+- **Components**: Modify the `Chatbot` component to fit your desired UI and functionality.
+- **API Routes**: Customize the backend logic in the `pages/api` folder to suit your needs, whether it’s an AI-powered bot or a rule-based chatbot.
+- **State Management**: The state management is already set up using React context; you can extend it as required for your app.
