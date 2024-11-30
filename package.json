@@ -12,8 +12,7 @@
     "ai"
   ],
   "author": "Ararya Arka",
-  "version": "0.1.4",
-  "private": false,
+  "version": "0.1.5",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
