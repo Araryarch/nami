@@ -7,61 +7,125 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { ArrowDownCircle } from 'lucide-react'
+import { MessageCircle, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import rehypeRaw from 'rehype-raw'
 
+type Role = 'system' | 'user' | 'assistant' | 'data'
+
+interface Message {
+  id: string
+  role: Role
+  content: string
+}
+
+interface ChatHistory {
+  id: string
+  title: string
+  messages: Message[]
+}
+
 export default function Chat() {
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>(() => {
+    const savedHistory = localStorage.getItem('chatHistory')
+    return savedHistory ? JSON.parse(savedHistory) : []
+  })
+
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null)
+
   const {
     messages,
     input,
     handleInputChange,
     handleSubmit,
+    setMessages,
     isLoading: chatIsLoading
-  } = useChat({
-    api: '/api/completion'
-  })
+  } = useChat({ api: '/api/completion' })
 
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const [isScrolledUp, setIsScrolledUp] = useState(false)
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1]
+      setIsLoading(lastMessage.role === 'assistant' && chatIsLoading)
+    }
+  }, [messages, chatIsLoading])
 
   const handleScroll = useCallback(() => {
     if (!messagesContainerRef.current) return
-
-    const { scrollTop, scrollHeight, clientHeight } =
-      messagesContainerRef.current
-    const scrollPosition = scrollTop + clientHeight
-    const atBottom = scrollHeight - scrollPosition < 100
-
-    setIsScrolledUp(!atBottom)
   }, [])
 
   useEffect(() => {
     const container = messagesContainerRef.current
     container?.addEventListener('scroll', handleScroll)
-
-    return () => {
-      container?.removeEventListener('scroll', handleScroll)
-    }
+    return () => container?.removeEventListener('scroll', handleScroll)
   }, [handleScroll])
 
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest'
-    })
-  }, [])
+  const createNewChat = useCallback(() => {
+    const newChatId = crypto.randomUUID()
+    const newChat: ChatHistory = {
+      id: newChatId,
+      title: 'New Chat',
+      messages: []
+    }
+
+    setChatHistory((prev) => [...prev, newChat])
+    setCurrentChatId(newChatId)
+    setMessages([])
+  }, [setMessages])
+
+  const selectChat = (chatId: string) => {
+    const selectedChat = chatHistory.find((chat) => chat.id === chatId)
+    if (selectedChat) {
+      setCurrentChatId(chatId)
+      setMessages(selectedChat.messages)
+    }
+  }
+
+  const deleteChat = (chatId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setChatHistory((prev) => prev.filter((chat) => chat.id !== chatId))
+
+    if (currentChatId === chatId) {
+      createNewChat()
+    }
+  }
 
   useEffect(() => {
-    if (!isScrolledUp) {
-      scrollToBottom()
+    if (currentChatId && messages.length > 0) {
+      setChatHistory((prev) => {
+        return prev.map((chat) => {
+          if (chat.id === currentChatId) {
+            const updatedChat = { ...chat, messages }
+            if (messages[0]?.content && messages[0]?.content !== chat.title) {
+              updatedChat.title = messages[0].content.slice(0, 30) || 'New Chat'
+            }
+
+            if (
+              JSON.stringify(updatedChat.messages) !==
+              JSON.stringify(chat.messages)
+            ) {
+              return updatedChat
+            }
+          }
+          return chat
+        })
+      })
     }
-  }, [messages, isScrolledUp, scrollToBottom])
+  }, [messages, currentChatId])
+
+  useEffect(() => {
+    if (chatHistory.length === 0) {
+      createNewChat()
+    } else if (!currentChatId) {
+      setCurrentChatId(chatHistory[chatHistory.length - 1].id)
+      setMessages(chatHistory[chatHistory.length - 1].messages)
+    }
+  }, [chatHistory, currentChatId, createNewChat, setMessages])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -73,32 +137,31 @@ export default function Chat() {
   const handleInputResize = () => {
     if (textareaRef.current) {
       const newHeight = textareaRef.current.scrollHeight
-      if (textareaRef.current.style.height !== `${newHeight}px`) {
-        textareaRef.current.style.height = 'auto'
-        textareaRef.current.style.height = `${Math.min(newHeight, 200)}px`
-      }
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${Math.min(newHeight, 200)}px`
     }
   }
 
   useEffect(() => {
-    setIsLoading(chatIsLoading)
-  }, [chatIsLoading])
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages])
 
   const renderContent = (content: string) => {
     const codeBlockRegex = /```(\w+)?\n([\s\S]+?)\n```/g
-
     const parts = content.split(codeBlockRegex)
+
     return parts.map((part, index) => {
       if (index % 3 === 2) {
         const language = parts[index - 1] || 'bash'
-        const code = part.trim()
         return (
           <SyntaxHighlighter
             key={index}
             style={nightOwl}
             language={language}
           >
-            {code}
+            {part.trim()}
           </SyntaxHighlighter>
         )
       }
@@ -116,80 +179,81 @@ export default function Chat() {
   }
 
   return (
-    <div className='flex flex-col h-screen bg-background max-w-full box-border'>
-      <div
-        ref={messagesContainerRef}
-        className='flex-grow overflow-y-auto p-4 px-20 space-y-5'
-      >
-        {messages.map((m, index) =>
-          m.role === 'user' ? (
+    <div className='flex flex-row min-h-screen w-full'>
+      <div className='w-[18%] px-5 py-4 bg-secondary'>
+        <h1 className='font-semibold mb-4'>Next Chatbot Template</h1>
+        <Button
+          onClick={createNewChat}
+          className='my-4 w-full bg-primary text-background hover:bg-primary/80'
+        >
+          + New Chat
+        </Button>
+        <div className='space-y-2'>
+          {chatHistory.map((chat) => (
             <div
-              key={m.id}
-              className='p-3 rounded-md bg-muted text-right text-foreground max-w-fit ml-auto'
+              key={chat.id}
+              className='flex items-center'
             >
-              {renderContent(m.content)}
+              <button
+                onClick={() => selectChat(chat.id)}
+                className={`w-full text-left p-2 rounded-md bg-secondary hover:bg-background flex items-center ${
+                  currentChatId === chat.id ? 'bg-muted' : ''
+                }`}
+              >
+                <MessageCircle className='mr-2 w-4 h-4' />
+                {chat.title || 'New Chat'}
+              </button>
+              <Button
+                variant='ghost'
+                size='icon'
+                onClick={(e) => deleteChat(chat.id, e)}
+                className='ml-2 text-destructive hover:bg-destructive/10'
+              >
+                <Trash2 className='w-4 h-4' />
+              </Button>
             </div>
-          ) : (
-            <div
-              key={m.id}
-              className={`p-3 rounded-md bg-background text-left text-foreground max-w-fit mr-auto ${
-                isLoading && index === messages.length - 1 ? 'hidden' : ''
-              }`}
-            >
-              {renderContent(m.content)}
-            </div>
-          )
-        )}
-
-        {isLoading && (
-          <div className='w-full flex justify-start'>
-            <div className='p-3 rounded-md bg-muted text-foreground min-w-[70vw] animate-pulse'>
-              <Skeleton className='w-64 h-8 mb-2 animate-pulse' />
-              <Skeleton className='w-48 h-8 animate-pulse' />
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
+          ))}
+        </div>
       </div>
 
-      {messages.length > 0 && isScrolledUp && (
-        <div className='fixed bottom-16 left-1/2 transform -translate-x-1/2 z-50'>
-          <Button
-            variant='secondary'
-            onClick={scrollToBottom}
-            className='p-2 rounded-full bg-background text-foreground shadow-md hover:bg-background/80'
-          >
-            <ArrowDownCircle size={24} />
-          </Button>
+      <div className='flex flex-col h-screen bg-background flex-1 box-border relative'>
+        <div
+          ref={messagesContainerRef}
+          className='flex-grow overflow-y-auto p-4 px-20 space-y-5'
+        >
+          {messages.map((m, index) => (
+            <div
+              key={m.id}
+              className={`p-3 rounded-md ${
+                m.role === 'user'
+                  ? 'bg-muted text-right'
+                  : 'bg-background text-foreground'
+              } max-w-fit ${m.role === 'user' ? 'ml-auto' : ''}`}
+            >
+              {isLoading && index === messages.length - 1 ? (
+                <Skeleton className='h-12 w-4/5' />
+              ) : (
+                renderContent(m.content)
+              )}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
         </div>
-      )}
 
-      <form
-        onSubmit={handleSubmit}
-        className='flex p-4 border-t justify-center'
-      >
-        <div className='max-w-2xl w-full flex'>
+        <div className='px-20 py-5 flex gap-2'>
           <Textarea
             ref={textareaRef}
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onInput={handleInputResize}
-            placeholder='Ask here...'
-            disabled={isLoading}
-            className='flex-grow p-2 border text-foreground rounded-md overflow-hidden resize-none max-h-[200px]'
+            placeholder='Type your message...'
             rows={1}
+            className='resize-none w-full text-foreground bg-background border-muted focus:ring-2 focus:ring-primary'
           />
-          <Button
-            type='submit'
-            disabled={isLoading}
-            className='ml-2 bg-primary text-background hover:bg-primary/80'
-          >
-            Kirim
-          </Button>
+          <Button onClick={handleSubmit}>Send</Button>
         </div>
-      </form>
+      </div>
     </div>
   )
 }
