@@ -27,7 +27,9 @@ export default function Chat() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSubmit(e)
+      if (!chatIsLoading) {
+        handleSubmit(e)
+      }
     }
   }
 
@@ -116,7 +118,12 @@ export default function Chat() {
           rows={1}
           className='resize-none max-w-[60vw] text-foreground bg-background border-muted focus:ring-2 focus:ring-primary'
         />
-        <Button onClick={handleSubmit}>Send</Button>
+        <Button
+          className={chatIsLoading ? 'bg-muted' : ''}
+          onClick={handleSubmit}
+        >
+          Send
+        </Button>
       </div>
     </div>
   )
