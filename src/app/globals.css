@@ -88,3 +88,25 @@ body {
 ::-webkit-scrollbar-track {
   background-color: hsl(var(--background));
 }
+
+.result ol,
+.result li {
+  margin-left: 1rem;
+}
+
+.result ol li,
+.result ul li {
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.result ol li::before,
+.result ul li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
